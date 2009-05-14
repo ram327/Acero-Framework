@@ -1,15 +1,20 @@
 <?php
 
-$addr = address();
-$rel_addr = relative_address();
-
 // OB_START
 ob_start();
 
 /*
 **  S I T E   V A R I A B L E S
 */
-$SITE_NAME = 'Site Name';
+// This is were you put the name of your website
+$SITE_NAME = 'Acero-Framework';
+
+// These variables point to the base URL and relative address
+// of your website
+$addr = address();
+$rel_addr = relative_address();
+
+// You can add more things here
 
 /*
 **   S E S S I O N S
@@ -19,6 +24,8 @@ include $rel_addr.'/sessions/session.php';
 
 /*
 ** I N C L U D E   F I L E S
+* 		this is where it all comes together
+*		feel free to add your own things
 */
 	// Database Connection
 	include $rel_addr.'/lib/mysql_connect.php';
@@ -38,6 +45,7 @@ include $rel_addr.'/sessions/session.php';
 /*
 **   M Y S Q L 
 */
+	// returns a database connection if you've successfully connected to one
 	function db_connect ($db_url, $db, $user, $pw){
 		if($dbc = @mysql_connect($db_url,$user,$pw)){
 			if (!@mysql_select_db ($db)){
@@ -53,16 +61,22 @@ include $rel_addr.'/sessions/session.php';
 /*
 **   P H P
 */
+	// returns the base URL of your website
+	// i.e., if this function is used in http://www.madeup.com/what.php
+	//	 it will return http://www.madeup.com
 	function address (){
 		return 'http://'.$_SERVER['SERVER_NAME'].'';
 	}
+	
+	// returns the physical location of your website
+	// just for easy access really
 	function relative_address(){
 		// Or whatever your server points to
 		return '/var/www';
 	}
 
-	// For cheap CSS hacks
-	// i.e. to change the css file if its IE
+	// You can use this with cheap CSS hacks
+	// i.e., to change the css file if its IE
 	function is_ie (){
 		//Not Internet Explorer
 		if(stristr($_SERVER['HTTP_USER_AGENT'], 'MSIE') === FALSE) {
@@ -73,7 +87,7 @@ include $rel_addr.'/sessions/session.php';
 		}
 	}
 	
-	//Retrieves page's name i.e. index.php
+	//Retrieves page's name
 	function this_page(){
 		return $_SERVER['PHP_SELF'];
 	}
@@ -101,15 +115,22 @@ include $rel_addr.'/sessions/session.php';
 	function refresh ($page = 'none', $dbpage = 'none',$seconds = 0){
 		$address = address();
 		switch(TRUE){
+			// refresh page to http://www.example.com/blog.php?page=2
 			case ($page != 'none' && $dbpage != 'none'):
 				return header('refresh: '.$seconds.'; url='.$address.$page.'?page='.$dbpage.'');
 				break;
+				
+			// refresh page to http://www.example.com/blog.php
 			case ($page != 'none'):
 				return header('refresh: '.$seconds.'; url='.$address.$page.'');
 				break;
+				
+			// refreshes to the same page and sets the variable page to something
 			case($dbpage != 'none'):
 				return header('refresh: '.$seconds.'; url='.$address.this_page().'?page='.$dbpage.'');
 				break;
+				
+			// refreshes to the same page
 			case($page == 'none'):
 				return header('refresh: '.$seconds.'; url='.$address.this_page().'');
 				break;
@@ -178,16 +199,12 @@ function body ($header,$subtitle=' ',$content,$navigation){
 		<body>
 		
 			<div id="header">
-				<div onclick="homeFunction()" id="title">'.headCheck($header).'</div>
-				<div id="personal">'.$personal.'</div>
+				<h1 onclick="goHome()" id="title">'.headCheck($header).'</h1>
 			</div>
 			
 			<div id="nav">'.navigation($navigation).'</div>
 	
 			<div id="content">
-				<div id="side">
-				'.$side.'
-				</div>
 				<h1>'.$subtitle.'</h1>
 				'.$content.'
 			</div>
@@ -212,7 +229,9 @@ function body ($header,$subtitle=' ',$content,$navigation){
 		echo $return;
 		
 		ob_end_flush();
-		mysql_close($dbc);
+		if($dbc){
+			mysql_close($dbc);
+		}
 	}
 	
 ?>

@@ -6,10 +6,9 @@
 
 	$navigation .= '
 	
-				<div class="box"><a href="'.address().'/howitworks.php">How It Works</a></div>
-				<div class="box"><a href="'.address().'/search.php">Search</a></div>
-				<div class="box"><a href="'.address().'/donate.php">Donate</a></div>
-				<div class="box"><a href="'.address().'/aboutus.php">About Us</a></div>
+				<ul>
+				<li><a href="'.$addr.'/">Home</a></li>
+				</ul>
 	
 			';
 	

@@ -1,6 +1,6 @@
 <?php
 
 // Clicking on title takes you to home page
-include relative_address().'/scripts/homeFunction.php';
+$scripts .= "\t".'<script language="javascript" type="text/javascript" src="'.$addr.'/scripts/goHome.js"></script>'."\n";
 
 ?>
